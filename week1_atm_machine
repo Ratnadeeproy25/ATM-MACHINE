@@ -1,0 +1,118 @@
+import time
+import os
+
+def clear_screen():
+    """Clear the console screen for better readability."""
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def atm_machine():
+    print("======================================")
+    print("           Welcome to ATM             ")
+    print("======================================")
+    time.sleep(1)
+    print("Please insert Your CARD...")
+
+    # Simulating card processing with a loading animation
+    for i in range(3):
+        print(".", end="", flush=True)
+        time.sleep(1)
+    print("\nCard inserted successfully.")
+
+    # Initial account details
+    password = 1234
+    balance = 5000
+    transaction_history = []
+
+    # Function to display options
+    def display_options():
+        print("""
+        ================================
+                ATM Main Menu
+        ================================
+        1 == Balance Inquiry
+        2 == Withdraw Balance
+        3 == Deposit Balance
+        4 == PIN Change
+        5 == Transaction History
+        6 == Exit
+        """)
+
+    # Taking ATM pin from user
+    pin = int(input("Enter your ATM pin: "))
+
+    # Checking if the pin is valid
+    if pin == password:
+        while True:
+            clear_screen()
+            display_options()
+
+            try:
+                # Taking an option from user
+                option = int(input("Please enter your choice: "))
+            except ValueError:
+                print("Please enter a valid option.")
+                time.sleep(2)
+                continue
+
+            clear_screen()
+
+            # Option 1: Balance Inquiry
+            if option == 1:
+                print(f"Your current balance is Rs. {balance}")
+                transaction_history.append(f"Balance inquiry: Rs. {balance}")
+                time.sleep(2)
+
+            # Option 2: Withdraw Balance
+            elif option == 2:
+                withdraw_amount = int(input("Please enter withdraw amount: "))
+                if withdraw_amount <= balance:
+                    balance -= withdraw_amount
+                    print(f"Rs. {withdraw_amount} has been debited from your account.")
+                    print(f"Your updated balance is Rs. {balance}")
+                    transaction_history.append(f"Withdrew Rs. {withdraw_amount}")
+                else:
+                    print("Insufficient balance.")
+                time.sleep(2)
+
+            # Option 3: Deposit Balance
+            elif option == 3:
+                deposit_amount = int(input("Please enter deposit amount: "))
+                balance += deposit_amount
+                print(f"Rs. {deposit_amount} has been credited to your account.")
+                print(f"Your updated balance is Rs. {balance}")
+                transaction_history.append(f"Deposited Rs. {deposit_amount}")
+                time.sleep(2)
+
+            # Option 4: PIN Change
+            elif option == 4:
+                new_pin = int(input("Please enter your new PIN: "))
+                confirm_pin = int(input("Please confirm your new PIN: "))
+                if new_pin == confirm_pin:
+                    password = new_pin
+                    print("PIN changed successfully.")
+                    transaction_history.append("PIN changed")
+                else:
+                    print("PIN does not match. Please try again.")
+                time.sleep(2)
+
+            # Option 5: Transaction History
+            elif option == 5:
+                print("Transaction History:")
+                for transaction in transaction_history:
+                    print(transaction)
+                input("\nPress Enter to return to the main menu.")
+                clear_screen()
+
+            # Option 6: Exit
+            elif option == 6:
+                print("Thank you for using the ATM. Have a nice day!")
+                break
+
+            else:
+                print("Invalid option. Please try again.")
+                time.sleep(2)
+    else:
+        print("Wrong pin. Please try again.")
+
+# Run the ATM machine simulation
+atm_machine()
